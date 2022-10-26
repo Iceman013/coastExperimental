@@ -17,7 +17,7 @@ function zoom(direction, x, y) {
         currenty = currenty - PAINFIX*y/magnify;
         magnify = magnify*MAGNIFICATION;
     }
-	svg.select("g")
+	svg.selectAll("g")
 		.attr("transform", "scale(" + magnify + "), translate(" + currentx + "," + currenty + ")")
         .selectAll("path")
             .style("stroke-width", (1/magnify)*0.5 + "px")
@@ -36,7 +36,7 @@ function move(x, y) {
     }
     currentx = currentx + (x - holdx)/magnify;
     currenty = currenty + (y - holdy)/magnify;
-    svg.select("g")
+    svg.selectAll("g")
 		.attr("transform", "scale(" + magnify + "), translate(" + currentx + "," + currenty + ")")
     if (LOG) {
         console.timeEnd("Move");
