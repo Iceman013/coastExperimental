@@ -53,11 +53,35 @@ function addTifLayer(name, input) {
         //    Just make sure to include the georaster option!
         //    http://leafletjs.com/reference-1.2.0.html#gridlayer
 
+        function colorScale(value) {
+            var r = 0;
+            var g = 0;
+            var b = 0;
+            if (value < 0.5) {
+                b = 1 - 2*value;
+                g = 2 * value;
+            } else {
+                g = 1 - 2*(value - 0.5);
+                r = 2*(value - 0.5);
+            }
+            return "rgb(" + 256*r + "," + 256*g + "," + 256*b + ")";
+        }
+        function doColors(input) {
+            const showup = 0;
+            if (input < showup) {
+                var adjusted = input - showup;
+                var scale = 0;
+                scale = 1 - (1/(Math.abs(adjusted) + 1));
+                return colorScale(scale);
+            }
+        }
+        //values[0] < 0 ? null : `rgb(${100*values[0]},${values[0]},${values[0]})`
         var tifLayer = new GeoRasterLayer({
             attribution: "Planet",
             georaster: georaster,
-            resolution: 128,
-            opacity: 0.75
+            resolution: 64,
+            opacity: 0.75,
+            pixelValuesToColorFn: values => doColors(values[0])
         });
         //tifLayer.addTo(map);
         layers.push(new Layer(name, "overlay", tifLayer));
