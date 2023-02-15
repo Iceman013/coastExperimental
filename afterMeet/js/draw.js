@@ -1,7 +1,6 @@
 // Global Variables
 var map;
 var layers = [];
-var tiffsAdded = 0;
 
 // Makes the leaflet map
 function drawMap() {
@@ -88,7 +87,6 @@ function addTifLayers() {
 
             //tifLayer.addTo(map);
             layers.push(new Layer(tiffList[i].name, "overlay", tifLayer));
-            tiffsAdded++;
             //map.fitBounds(layer.getBounds());
         }));
     }
