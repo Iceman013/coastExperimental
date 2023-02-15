@@ -42,52 +42,57 @@ function addBaseLayers() {
 }
 
 // Adds a geotiff object as a layer
-function addTifLayer(name, input) {
-    var url_to_geotiff_file = input;
+function addTifLayers() {
+    var promiseList = [];
+    for (let i = 0; i < tiffList.length; i++) {
+        var url_to_geotiff_file = tiffList[i].url;
 
-    parseGeoraster(url_to_geotiff_file).then(georaster => {
-        console.log("georaster:", georaster);
+        promiseList.push(parseGeoraster(url_to_geotiff_file).then(georaster => {
+            console.log("georaster:", georaster);
 
-        //    GeoRasterLayer is an extension of GridLayer,
-        //    which means can use GridLayer options like opacity.
-        //    Just make sure to include the georaster option!
-        //    http://leafletjs.com/reference-1.2.0.html#gridlayer
+            //    GeoRasterLayer is an extension of GridLayer,
+            //    which means can use GridLayer options like opacity.
+            //    Just make sure to include the georaster option!
+            //    http://leafletjs.com/reference-1.2.0.html#gridlayer
 
-        function colorScale(value) {
-            var r = 0;
-            var g = 0;
-            var b = 0;
-            if (value < 0.5) {
-                b = 1 - 2*value;
-                g = 2 * value;
-            } else {
-                g = 1 - 2*(value - 0.5);
-                r = 2*(value - 0.5);
+            function colorScale(value) {
+                var r = 0;
+                var g = 0;
+                var b = 0;
+                if (value < 0.5) {
+                    b = 1 - 2*value;
+                    g = 2 * value;
+                } else {
+                    g = 1 - 2*(value - 0.5);
+                    r = 2*(value - 0.5);
+                }
+                return "rgb(" + 256*r + "," + 256*g + "," + 256*b + ")";
             }
-            return "rgb(" + 256*r + "," + 256*g + "," + 256*b + ")";
-        }
-        function doColors(input) {
-            const showup = 0;
-            if (input < showup) {
-                var adjusted = input - showup;
-                var scale = 0;
-                scale = 1 - (1/(Math.abs(adjusted) + 1));
-                return colorScale(scale);
+            function doColors(input) {
+                const showup = 1;
+                if (input < showup) {
+                    var adjusted = input - showup;
+                    var scale = 0;
+                    scale = 1 - (1/(Math.abs(adjusted) + 1));
+                    return colorScale(scale);
+                }
             }
-        }
-        //values[0] < 0 ? null : `rgb(${100*values[0]},${values[0]},${values[0]})`
-        var tifLayer = new GeoRasterLayer({
-            attribution: "Planet",
-            georaster: georaster,
-            resolution: 64,
-            opacity: 0.75,
-            pixelValuesToColorFn: values => doColors(values[0])
-        });
-        //tifLayer.addTo(map);
-        layers.push(new Layer(name, "overlay", tifLayer));
-        tiffsAdded++;
-        //map.fitBounds(layer.getBounds());
-    });
+
+            var tifLayer = new GeoRasterLayer({
+                attribution: "Planet",
+                georaster: georaster,
+                resolution: 64,
+                opacity: 0.75,
+                pixelValuesToColorFn: values => doColors(values[0])
+            });
+
+            //tifLayer.addTo(map);
+            layers.push(new Layer(tiffList[i].name, "overlay", tifLayer));
+            tiffsAdded++;
+            //map.fitBounds(layer.getBounds());
+        }));
+    }
+    return promiseList;
 }
 
 // Creates the control panel for layer display
@@ -107,16 +112,6 @@ function makeControl() {
 function drawLayers() {
     drawMap();
     addBaseLayers();
-    for (let i = 0; i < tiffList.length; i++) {
-        addTifLayer(tiffList[i].name, tiffList[i].url);
-    }
-
-    // Checks to make sure all tifs have been made before adding controls
-    var checkTifs = setInterval(function() {
-        if (tiffsAdded == tiffList.length) {
-            clearInterval(checkTifs);
-            makeControl();
-        }
-    }, 100);
+    Promise.all(addTifLayers()).then(makeControl);
 }
 drawLayers();
