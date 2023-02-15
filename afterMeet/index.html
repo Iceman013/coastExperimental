@@ -1,25 +1,44 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<!-- Meta Data -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Imported styles -->
     	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+		<link href="https://fonts.googleapis.com/css?family=Alata" rel="stylesheet">
+		
+		<!-- Custom styles -->
 		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/controls.css">
+
     	<!-- Access-Control-Allow-Origin : * -->
   	</head>
 	<body>
-    	<div id="map"></div>
+		<div class="container">
+			<div id="controls">
+				<h1>Howdy</h1>
+				<p>This is very much in progress</p>
+			</div>
+			<div id="map"></div>
+		</div>
 	</body>
 	<footer>
+		<!-- Imported code -->
 		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 		<script src="https://unpkg.com/proj4"></script>
 		<script src="https://unpkg.com/georaster"></script>
 		<script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
 
+		<!-- My code -->
+		<!-- Classes -->
 		<script src="js/layer.js" type="text/javascript"></script>
 		<script src="js/tiff.js" type="text/javascript"></script>
 
+		<!-- Constants -->
 		<script src="js/tiffList.js" type="text/javascript"></script>
 
+		<!-- Run on start -->
 		<script src="js/draw.js" type="text/javascript"></script>
 	</footer>
 </html>

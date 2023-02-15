@@ -95,6 +95,7 @@ function addTifLayers() {
 
 // Creates the control panel for layer display
 function makeControl() {
+    // Built in layer controls
     var layerControl = L.control.layers().addTo(map);
     for (let i = 0; i < layers.length; i++) {
         if (layers[i].type == "base") {
