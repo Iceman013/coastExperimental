@@ -4,3 +4,23 @@
 
     overflow-y: auto;
 }
+
+.baseLayer {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 5% 95%;
+}
+.baseLayerTitle {
+    padding-left: 3%;
+}
+
+.overLayer {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 5% 95%;
+}
+.overLayerTitle {
+    padding-left: 3%;
+}

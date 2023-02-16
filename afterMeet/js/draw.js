@@ -1,6 +1,7 @@
 // Global Variables
 var map;
-var layers = [];
+var baseLayers = [];
+var overLayers = [];
 
 // Makes the leaflet map
 function drawMap() {
@@ -32,12 +33,13 @@ function addBaseLayers() {
         subdomains:['mt0','mt1','mt2','mt3']
     });
 
-    layers.push(new Layer("Streets", "base", googleStreets));
-    layers.push(new Layer("Hybrid", "base", googleHybrid));
-    layers.push(new Layer("Satellite", "base", googleSat));
-    layers.push(new Layer("Terrain", "base", googleTerrain));
+    baseLayers.push(new Layer("Streets", "base", googleStreets));
+    baseLayers.push(new Layer("Hybrid", "base", googleHybrid));
+    baseLayers.push(new Layer("Satellite", "base", googleSat));
+    baseLayers.push(new Layer("Terrain", "base", googleTerrain));
     
     googleHybrid.addTo(map);
+    baseLayers[1].showing = true;
 }
 
 // Adds a geotiff object as a layer
@@ -86,7 +88,7 @@ function addTifLayers() {
             });
 
             //tifLayer.addTo(map);
-            layers.push(new Layer(tiffList[i].name, "overlay", tifLayer));
+            overLayers.push(new Layer(tiffList[i].name, "overlay", tifLayer));
             //map.fitBounds(layer.getBounds());
         }));
     }
@@ -95,15 +97,15 @@ function addTifLayers() {
 
 // Creates the control panel for layer display
 function makeControl() {
-    // Built in layer controls
-    var layerControl = L.control.layers().addTo(map);
-    for (let i = 0; i < layers.length; i++) {
-        if (layers[i].type == "base") {
-            layerControl.addBaseLayer(layers[i].layer, layers[i].name);
-        }
-        if (layers[i].type == "overlay") {
-            layerControl.addOverlay(layers[i].layer, layers[i].name);
-        }
+    for (let i = 0; i < baseLayers.length; i++) {
+        var base = document.getElementById("baseLayers");
+        var element = makeBaseLayerControl(baseLayers[i]);
+        base.appendChild(element);
+    }
+    for (let i = 0; i < overLayers.length; i++) {
+        var base = document.getElementById("overLayers");
+        var element = makeOverLayerControl(overLayers[i]);
+        base.appendChild(element);
     }
 }
 
