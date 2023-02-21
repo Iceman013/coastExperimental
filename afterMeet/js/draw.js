@@ -63,18 +63,26 @@ function addTifLayers() {
                 if (value < 0.5) {
                     b = 1 - 2*value;
                     g = 2 * value;
-                } else {
+                } else if (value < 1) {
                     g = 1 - 2*(value - 0.5);
                     r = 2*(value - 0.5);
+                } else {
+                    r = 1;
                 }
-                return "rgb(" + 256*r + "," + 256*g + "," + 256*b + ")";
+                function flhex(input) {
+                    return Math.floor(256*input);
+                }
+                return "rgb(" + flhex(r) + "," + flhex(g) + "," + flhex(b) + ")";
             }
             function doColors(input) {
-                const showup = 1;
-                if (input < showup) {
-                    var adjusted = input - showup;
-                    var scale = 0;
-                    scale = 1 - (1/(Math.abs(adjusted) + 1));
+                var eval;
+                if (MIN < MAX) {
+                    eval = (input > MIN);
+                } else {
+                    eval = (input < MIN);
+                }
+                if (eval) {
+                    var scale = (input - MIN)/(MAX - MIN);
                     return colorScale(scale);
                 }
             }

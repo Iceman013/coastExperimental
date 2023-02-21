@@ -4,6 +4,7 @@ function makeBaseLayerControl(layer) {
     base.classList.add("baseLayer");
 
     var button = document.createElement("input");
+    button.id = layer.name;
     button.value = layer.name;
     button.type = "radio";
     button.name = "baseLayer";
@@ -29,8 +30,9 @@ function makeBaseLayerControl(layer) {
         }
     });
 
-    var title = document.createElement("h3");
+    var title = document.createElement("label");
     title.innerHTML = layer.name;
+    title.for = layer.name;
     title.classList.add("baseLayerTitle");
     base.appendChild(title);
 
@@ -43,6 +45,7 @@ function makeOverLayerControl(layer) {
     base.classList.add("overLayer");
 
     var button = document.createElement("input");
+    button.id = layer.name;
     button.value = layer.name;
     button.type = "checkbox";
     base.appendChild(button);
@@ -55,10 +58,25 @@ function makeOverLayerControl(layer) {
         layer.showing = !layer.showing;
     });
 
-    var title = document.createElement("h3");
-    title.innerHTML = layer.name;
+    var title = document.createElement("label");
+    title.for = layer.name;
     title.classList.add("overLayerTitle");
     base.appendChild(title);
+
+    var name = document.createElement("text");
+    name.innerHTML = layer.name;
+    title.appendChild(name);
+
+    var boop = document.createElement("span");
+    boop.classList.add("material-symbols-outlined");
+    boop.classList.add("controlButton");
+    boop.innerHTML = "zoom_in";
+    title.appendChild(boop);
+    boop.addEventListener("click", function() {
+        if (layer.showing) {
+            map.fitBounds(layer.layer.getBounds());
+        }
+    });
 
     return base;
 }
