@@ -8,6 +8,9 @@ import "./css/legend.css";
 import "./css/controls.css";
 
 export default function App() {
+	var script = document.createElement("script");
+		script.innerHTML = "var mapsPlaceholder = [];L.Map.addInitHook(function () {mapsPlaceholder.push(this);console.log('Uwu');});";
+		document.body.appendChild(script)
     useEffect(() => {
         document.body.dispatchEvent(new Event("beginProcess"));
     });
@@ -19,7 +22,9 @@ export default function App() {
 				<div id="baseLayers"></div>
 				<div id="overLayers"></div>
 			</div>
-			<div id="map">
+			<div>
+				<MapContainer id="map" center={[35, -75]} zoom={5}>
+				</MapContainer>
 			</div>
 			<div id="legend">
 				<h3>Legend</h3>

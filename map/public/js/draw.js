@@ -5,10 +5,7 @@ var overLayers = [];
 
 // Makes the leaflet map
 function drawMap() {
-    map = L.map('map', {
-        center: [35, -75],
-        zoom: 5
-    });
+    map = mapsPlaceholder[0];
 }
 
 // Creates the default base layers (street map, satellite map, etc)
@@ -90,14 +87,12 @@ function addTifLayers() {
             var tifLayer = new GeoRasterLayer({
                 attribution: "Planet",
                 georaster: georaster,
-                resolution: 64,
+                resolution: RESOLUTION,
                 opacity: 0.75,
                 pixelValuesToColorFn: values => doColors(values[0])
             });
 
-            //tifLayer.addTo(map);
             overLayers.push(new Layer(tiffList[i].name, "overlay", tifLayer));
-            //map.fitBounds(layer.getBounds());
         }));
     }
     return promiseList;
