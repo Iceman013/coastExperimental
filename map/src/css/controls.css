@@ -22,6 +22,10 @@
 }
 .controlButton {
     cursor: pointer;
-    margin-left: auto;
     float: right;
+}
+
+.optionButtons {
+    float: right;
+    margin-left: auto;
 }

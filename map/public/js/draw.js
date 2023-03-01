@@ -64,7 +64,7 @@ function addTifLayers() {
             });
 
             // Add layer to the list for sorting
-            overLayers.push(new Layer(tiffList[i].name, "overlay", tifLayer));
+            overLayers.push(new Layer(tiffList[i].name, "overlay", tifLayer, tiffList[i].description));
         }));
     }
     return promiseList;
