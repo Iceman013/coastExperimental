@@ -8,39 +8,10 @@ function drawMap() {
     map = mapsPlaceholder[0];
 }
 
-// Creates the default base layers (street map, satellite map, etc)
-function addBaseLayers() {
-    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    });
-
-    googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    });
-
-    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    });
-
-    googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    });
-
-    baseLayers.push(new Layer("Streets", "base", googleStreets));
-    baseLayers.push(new Layer("Hybrid", "base", googleHybrid));
-    baseLayers.push(new Layer("Satellite", "base", googleSat));
-    baseLayers.push(new Layer("Terrain", "base", googleTerrain));
-    
-    googleHybrid.addTo(map);
-    baseLayers[1].showing = true;
-}
-
 // Adds a geotiff object as a layer
 function addTifLayers() {
+    map.createPane("overlay");
+    map.getPane("overlay").style.zIndex = 2;
     var promiseList = [];
     for (let i = 0; i < tiffList.length; i++) {
         var url_to_geotiff_file = tiffList[i].url;
@@ -89,6 +60,7 @@ function addTifLayers() {
                 georaster: georaster,
                 resolution: RESOLUTION,
                 opacity: 0.75,
+                pane: "overlay",
                 pixelValuesToColorFn: values => doColors(values[0])
             });
 
@@ -100,11 +72,6 @@ function addTifLayers() {
 
 // Creates the control panel for layer display
 function makeControl() {
-    for (let i = 0; i < baseLayers.length; i++) {
-        var base = document.getElementById("baseLayers");
-        var element = makeBaseLayerControl(baseLayers[i]);
-        base.appendChild(element);
-    }
     for (let i = 0; i < overLayers.length; i++) {
         var base = document.getElementById("overLayers");
         var element = makeOverLayerControl(overLayers[i]);
@@ -115,6 +82,5 @@ function makeControl() {
 // Draws all elements
 function drawLayers() {
     drawMap();
-    addBaseLayers();
     Promise.all(addTifLayers()).then(makeControl);
 }
