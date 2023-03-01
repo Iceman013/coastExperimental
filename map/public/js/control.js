@@ -1,8 +1,10 @@
 // Overlay layer control with checkbox function
 function makeOverLayerControl(layer) {
+    // Base
     var base = document.createElement("div");
     base.classList.add("overLayer");
 
+    // The checkbox
     var button = document.createElement("input");
     button.id = layer.name;
     button.value = layer.name;
@@ -17,15 +19,18 @@ function makeOverLayerControl(layer) {
         layer.showing = !layer.showing;
     });
 
+    // Label
     var title = document.createElement("label");
     title.for = layer.name;
     title.classList.add("overLayerTitle");
     base.appendChild(title);
 
+    // Name
     var name = document.createElement("text");
     name.innerHTML = layer.name;
     title.appendChild(name);
 
+    // Zoom in button
     var boop = document.createElement("span");
     boop.classList.add("material-symbols-outlined");
     boop.classList.add("controlButton");
