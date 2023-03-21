@@ -8,6 +8,7 @@ import { useMap } from "react-leaflet/hooks";
 
 import "./css/style.css";
 import "./css/legend.css";
+import "./css/sidebar.css";
 import "./css/controls.css";
 
 export default function App() {
@@ -19,11 +20,23 @@ export default function App() {
     });
 	return (
 		<div className="container">
-			<div id="controls">
-				<h1>Howdy</h1>
-				<p>This is very much in progress</p>
-				<div id="baseLayers"></div>
-				<div id="overLayers"></div>
+			<div id="sidebar">
+				<div id="controls">
+					<div>
+						<select>
+							<option>Forecast</option>
+							<option>Hurricane</option>
+						</select>
+					</div>
+					<hr></hr>
+					<div id="overLayers"></div>
+					<hr></hr>
+				</div>
+				<div id="credits">
+					<h1>Credits</h1>
+					<p>List of people and stuff</p>
+					<img src="logo.png"></img>
+				</div>
 			</div>
 			<MapContainer id="map" center={[35, -75]} zoom={5}>
 				<LayersControl position="topleft">
